@@ -66,3 +66,4 @@ az role assignment create \
 --assignee $clientId \
 --role 'Storage Blob Data Contributor' \
 --scope $storageId
+zsh
