@@ -34,7 +34,6 @@ az aks create \
 --enable-aad \
 --aad-admin-group-object-ids $groupId \
 --enable-addons azure-keyvault-secrets-provider \
---enable-blob-driver \
 --node-count 1 \
 --node-vm-size "Standard_B2s"
 

@@ -1,0 +1,34 @@
+agent:
+  customSecret: circleci-token-secrets
+  serviceAccount.create: false
+  rbac.create: false
+  resourceClasses:
+   circleci-runner/resourceClass:
+    metadata:
+    annotations:
+      custom.io: circleci-runner
+    spec:
+      serviceAccountName: circleci-sa
+      containers:
+        - resources:
+            limits:
+              github.com/fuse: 1
+          volumeMounts:
+            - name: agent-store
+              mountPath: /home/build/
+            - name: secrets-store
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          securityContext:
+            privileged: true
+            runAsUser: 1000
+      volumes:
+        - name: agent-store
+          persistentVolumeClaim:
+            claimName: pvc-circleci
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aks-kv-workload-identity"
